@@ -22,7 +22,7 @@ class App extends React.Component {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.test = this.test.bind(this);
-        this.state = {selected: '', random: './Rock.jpg', label: 'Choose: '};
+        this.state = {selected: '', random: './Rock.jpg', label: 'Choose: ', wins: 0, lost: 0, tie: 0};
     }
 
     handleChange(selected) {
@@ -31,14 +31,22 @@ class App extends React.Component {
 
     test(rand) {
         this.setState({random: rand, label: calculateWinner(this.state.selected, rand)});
+        setTimeout(() => {
+            if (this.state.label === 'WINNER!') {
+                this.setState({wins: this.state.wins + 1});
+            } else if (this.state.label === 'LOSER!') {
+                this.setState({lost: this.state.lost + 1});
+            } else {
+                this.setState({tie: this.state.tie + 1});
+            }
+        }, 50);
     }
 
     render() {
-        console.log(calculateWinner(this.state.selected, this.state.random))
-
         return (
             <div className="margin">
                 <h1>Rock, Paper, Scissors!</h1>
+                <h2>Wins: {this.state.wins} Lost: {this.state.lost} Tie: {this.state.tie}</h2>
                 <h2 id="winner">{this.state.label}</h2>
                 <div>
                     <Rock selected={this.state.selected} onClickChanged={this.handleChange}/>
